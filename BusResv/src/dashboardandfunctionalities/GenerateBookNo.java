@@ -12,7 +12,7 @@ public class GenerateBookNo {
 	
 	
 
-	private int length = 10;
+	private int length = 8;
 	
 
 	public int getLength() {

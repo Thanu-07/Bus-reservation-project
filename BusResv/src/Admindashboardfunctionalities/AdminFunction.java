@@ -310,7 +310,7 @@ public static ArrayList <String> BookingHistory(String user) {
 		
 		ArrayList <String> bookhis = new ArrayList<>();
 		
-		String query = "select * from booking_records where User_name = ' " + user + "'";
+		String query = "select * from booking_records where User_name = '" + user + "'";
 		
 		try(	Connection con = DatabaseConnection.getDatabaseConnection();
 				Statement st = con.createStatement();
@@ -334,38 +334,40 @@ public static ArrayList <String> BookingHistory(String user) {
 	}
 	
 	
-	public static String BookingCancellation(String bookno){
+	public static int BookingCancellation(String bookno){
 		
 		
-	
-		
-		String query = "select booking_no from booking_records where booking_no = '" +bookno +"'";
 		
 		
-		try(	Connection con = DatabaseConnection.getDatabaseConnection();
+				String query = "select record from booking_records where booking_no = '" + bookno +"'";
+				
+				
+				try ( Connection con = DatabaseConnection.getDatabaseConnection();
 				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(query);){
 			
-			int i = 1;
+			
 			while(rs.next()) {
 				
-				String bookingno = rs.getString(1);
+				int bookingnoid = rs.getInt(1);
 						
-				getBookNoID(rs.getString(1));
 				
-					return bookingno;
+					return bookingnoid;
 				
 		
 				
 			}
 		
 		
-	}
-		catch(Exception e ) {
-			e.printStackTrace();
-		}
+				}
+				catch(Exception e ) {
+					//e.printStackTrace();
+					System.out.println(e.getMessage());
+				}
+				
 		
-		return "";
+		
+		return 0;
 	
 	}
 	
@@ -384,6 +386,8 @@ public static ArrayList <String> BookingHistory(String user) {
 				Statement st = con.createStatement();){
 			
 			int rows = st.executeUpdate(query);
+			
+			System.out.println("Ticket cancellation request successful...");
 			
 			
 		}
@@ -408,6 +412,8 @@ public static ArrayList <String> BookingHistory(String user) {
 				ResultSet rs = st.executeQuery(query);){
 			
 			while(rs.next()) {
+				
+				System.out.println("Refund for Ticket Cancellation");
 		
 				System.out.println("Your account XXXXXXXXXX has credited : Rs." + rs.getDouble(1));
 				
@@ -427,52 +433,58 @@ public static ArrayList <String> BookingHistory(String user) {
 
 
 
-	public static void getBookNoID(String bookno) {
-		
-		String query = "select record from booking_records where booking_no = '" + bookno + "'";
-		
-		try(		Connection con = DatabaseConnection.getDatabaseConnection();
-				Statement st = con.createStatement();
-				ResultSet rs = st.executeQuery(query);){
-			
-			while(rs.next()) {
-				
-				requestCancelTicket(rs.getInt(1));
-				getBusFromID(rs.getInt(1));
-				
-			}
-			
-			
-			
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
+//	public static void getBookNoID(String bookno) {
+//		
+//		String query = "select record from booking_records where booking_no = '" + bookno + "'";
+//		
+//		try(		Connection con = DatabaseConnection.getDatabaseConnection();
+//				Statement st = con.createStatement();
+//				ResultSet rs = st.executeQuery(query);){
+//			
+//			while(rs.next()) {
+//				
+//				requestCancelTicket(rs.getInt(1));
+//				getBusFromID(rs.getInt(1));
+//				
+//			}
+//			
+//			
+//			
+//		}
+//		catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//	}
 	
-	public static void getBusFromID(int booknoid){
+	public static int getBusFromID(int booknoid){
 		
 		String query = "select bus_No from booking_records where record = " + booknoid ;
 		
-		try(		Connection con = DatabaseConnection.getDatabaseConnection();
+		try(	Connection con = DatabaseConnection.getDatabaseConnection();
 				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(query);){
 		
 			
 			while(rs.next()) {
-				getBusIdFromBus(rs.getInt(1));
+				//return rs.getInt(1);
+				int id = getBusIdFromBus(rs.getInt(1));
+				return id;
 			}
 		
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+		
+		return 0;
 	}
 	
 		
-		public static void getBusIdFromBus(int busno) {
+		public static int getBusIdFromBus(int busno) {
 		
+			int id =0 ;
+			
 			String query = "select id from bus_list where bus_No = " + busno ;
 			
 			try(	Connection con = DatabaseConnection.getDatabaseConnection();
@@ -481,7 +493,8 @@ public static ArrayList <String> BookingHistory(String user) {
 			
 				
 				if(rs.next()) {
-					refundTicketFare (rs.getInt(1));
+					id =  rs.getInt(1);
+					//refundTicketFare (rs.getInt(1));
 					
 				}
 			
@@ -490,7 +503,7 @@ public static ArrayList <String> BookingHistory(String user) {
 				e.printStackTrace();
 			}
 			
-			
+			return id;
 			
 		}
 	

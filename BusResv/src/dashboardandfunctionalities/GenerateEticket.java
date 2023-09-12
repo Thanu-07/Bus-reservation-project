@@ -26,7 +26,7 @@ public class GenerateEticket {
 			// System.out.println("Booking ID : " + rs.getString(1) + "                    Bus : " + rs.getInt(5) + "                    Bus Type : " + rs.getInt(6)+ "\n" + "Boarding Point : " + rs.getString(8) + "\nJourney Date and Time : " + rs.getString(9) + "                    Dropping Point : " + rs.getString(10) + "\nDropping Date and Time : " + rs.getString(11) + "\n Passenger Details : " + rs.getString(2) + " | Age : " + rs.getInt(3) + " | Gender : " + rs.getString(4) + "\n Seat No : " + rs.getInt(7));
 			
 			System.out.println("\n Booking ID : " + rs.getString(1) + "            Bus : " + rs.getInt(5) + "            Bus Type : " + rs.getString(6) + "\n\n-----------------------------------------------------------------------------------------------------\n\n Boarding Point : " + rs.getString(8) + "                         |     Dropping Point : " + rs.getString(10) + "\n\n Journey Date and Time : " + rs.getString(9)  + "    |     Dropping Date and Time : " + rs.getString(11) + "\n\n-----------------------------------------------------------------------------------------------------\n\n Passenger Details : " + rs.getString(2) + " | Age : " + rs.getInt(3) + " | Gender : " + rs.getString(4) + "\n Seat No           : " + rs.getInt(7));
-			
+			System.out.println();
 		}
 		
 	}

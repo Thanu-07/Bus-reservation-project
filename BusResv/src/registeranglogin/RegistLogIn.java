@@ -238,7 +238,7 @@ public class RegistLogIn {
 				
 			final String OrgUser = RegisterDAO.ValidateLogInUser(emilorusrnme);
 
-			if (!OrgUser.equals("")) {
+			if (!OrgUser.equals("") && OrgUser.equals(emilorusrnme)) {
 
 				final String OrgPswd = RegisterDAO.ValidateLogInPassword(OrgUser);
 

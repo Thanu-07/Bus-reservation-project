@@ -20,7 +20,26 @@ public class UserBooking {
 	String email;
 	String mobile_no;
 	
+	private int PassSeatNo;
 	
+	
+	
+	public int getPassSeatNo() {
+		return PassSeatNo;
+	}
+
+
+
+
+
+	public void setPassSeatNo(int passSeatNo) {
+		PassSeatNo = passSeatNo;
+	}
+
+
+
+
+
 	UserBooking(){
 //		Scanner scanner = new Scanner(System.in);
 //		CheckingValidName(scanner);
@@ -40,6 +59,8 @@ public class UserBooking {
 		
 		
 	}
+	
+	
 	
 
 
@@ -248,7 +269,7 @@ public String CheckValidEmail(Scanner s) {
 		int age = ub.age;
 		String gender	= ub.gender;
 		int busID = eum.getBus_id();
-		int seatNo = eum.getBusSeat();
+		int seatNo = ub.getPassSeatNo();
 		LocalDate date = eum.getDate();
 		
 		java.sql.Date sqldate = Date.valueOf(date);
@@ -328,6 +349,22 @@ public String CheckValidEmail(Scanner s) {
 
 
 
+	public static double PriceDetails(int bus_id, int psngerCount) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		String getBus = "select fare from bus_fare join bus_list on bus_list.id = bus_fare.fare_id where bus_list.bus_No = " + bus_id +"";
+		Connection con = DatabaseConnection.getDatabaseConnection();
+		Statement st = con.createStatement();
+		ResultSet rs = st.executeQuery(getBus);
+		
+		while(rs.next()) {
+			double ticketprice = psngerCount * rs.getInt(1);
+			return ticketprice;
+		}
+		return 0;
+		
+	}
+	
 	public static double PriceDetails(int bus_id) throws SQLException {
 		// TODO Auto-generated method stub
 		
@@ -337,70 +374,75 @@ public String CheckValidEmail(Scanner s) {
 		ResultSet rs = st.executeQuery(getBus);
 		
 		while(rs.next()) {
-			return rs.getInt(1);
+			 
+			return  rs.getInt(1);
 		}
 		return 0;
 		
 	}
+	
+	
+	
+	
 
 
 
 	public int PaymentOption(Scanner s, double priceDetails) {
-		int busfare = (int) priceDetails;
+		double busfare = priceDetails;
 		boolean present = false;
-		int option ;
-		
+		int option = 1;
+
 		String upiFormat = "^[a-zA-Z0-9.-]{2,256}@[a-zA-Z][a-zA-Z]{2,64}$";
-		
-		//can be your name, the first half of your email address, or even your mobile number, and '@ybl' is the initials of your bank
-		
-		
-		
-		
-		while(!present) {
-		
+
+		// can be your name, the first half of your email address, or even your mobile
+		// number, and '@ybl' is the initials of your bank
+
+		while (!present) {
+
 			System.out.println("Enter UPI ID : ");
-			
+
 			String UPI_ID = s.nextLine();
-		
+
 			if (UPI_ID.matches(upiFormat)) {
 				System.out.println("\nTotal Bus Fare : " + busfare);
-				
+
 				System.out.println("\nPress 1 to continue payment | Press 2 to exit : ");
-				
+
 				try {
-				option = s.nextInt();
-				if(option == 1) {
-					System.out.println("Payment Successful.....");
-					present = true;
-					return 1;
-				}
-				
-				else if(option < 1 || option > 2) {
-				
-				System.out.println("Invalid option ....");
-	
-				
-				}
-				
-				else
-				{
-					//System.out.println("\n Exit Payment");
-					present = true;
-				}
-				}
-				catch(Exception e) {
+
+					while (option == 1) {
+
+						option = s.nextInt();
+
+						if (option == 1) {
+							System.out.println("Payment Successful.....");
+							present = true;
+							return 1;
+						}
+
+						else if (option < 1 || option > 2) {
+
+							System.out.println("Invalid option ....");
+							option = 1;
+
+						}
+
+						else {
+							// System.out.println("\n Exit Payment");
+							present = true;
+						}
+					}
+				} catch (Exception e) {
 					System.out.println(e);
 					s.nextLine();
-					
+
 				}
-				
-			} else 
+
+			} else
 				System.out.println("Invalid UPI ID.....");
-				//s.nextLine();}
-			
-		
-	}
+			// s.nextLine();}
+
+		}
 		return 0;
 
 	}

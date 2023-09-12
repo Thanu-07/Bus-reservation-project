@@ -113,6 +113,7 @@ public class UserMenu {
 									
 									eum.setBusSeat((int)in[i]);
 									
+									
 									UserBooking ubb = new UserBooking();
 									
 									s.nextLine();
@@ -120,6 +121,7 @@ public class UserMenu {
 									ubb.CheckingValidName(s);
 									ubb.CheckValidGender(s);
 									ubb.CheckingValidAge(s);
+									ubb.setPassSeatNo(eum.getBusSeat());
 									
 									passcount.add(ubb);
 									// note : reading input String after int need to gave s.nextLine(); reading input String before getting input as int no need
@@ -128,7 +130,9 @@ public class UserMenu {
 									
 									}
 									
-									System.out.println("\nTicket Price Details : " + UserBooking.PriceDetails(eum.getBus_id()) +"\n");
+									System.out.println("\nTicket Price Details : " + UserBooking.PriceDetails(eum.getBus_id()) + " * " + passcount.size());
+									
+									System.out.println("\nTotal Ticket Price : " + UserBooking.PriceDetails(eum.getBus_id(),passcount.size()) +"\n");
 									
 									
 									while(true) {
@@ -141,7 +145,7 @@ public class UserMenu {
 									
 										s.nextLine();
 									
-									int paid = ub.PaymentOption(s, UserBooking.PriceDetails(eum.getBus_id()));
+									int paid = ub.PaymentOption(s, UserBooking.PriceDetails(eum.getBus_id(),passcount.size()));
 									
 									
 									if(paid == 1) {
@@ -226,6 +230,8 @@ public class UserMenu {
 							
 							else if (choice == 2) {
 								
+								
+								
 							ArrayList<String> getbookhis= AdminFunction.BookingHistory(user);
 							
 							if(!getbookhis.isEmpty()) {
@@ -236,9 +242,11 @@ public class UserMenu {
 									System.out.println(str + "\n");
 								}
 							}
-							else
+							else 
+//								
 								System.out.println("No Booking History found...");
 								
+							
 							}
 							
 							else if (choice == 3) {
@@ -249,14 +257,37 @@ public class UserMenu {
 								
 								String bookno = s.nextLine();
 								
-								String bookingno = AdminFunction.BookingCancellation(bookno);
-								
-								if(!bookingno.equals("")) {
+								try {
 									
+								int num =(Integer.parseInt(bookno));
+								
+								num = AdminFunction.BookingCancellation(bookno);
+								
+								if(num != 0) {
+									
+									int getbusfare = AdminFunction.getBusFromID(num);
+									
+									System.out.println("Ticket cancellation request in process...");
+									
+									AdminFunction.requestCancelTicket(num);
+									
+									
+									AdminFunction.refundTicketFare(getbusfare);
+									
+									
+								
 								}
 								else
 									System.out.println("No Booking found ...");
 								
+								}
+								
+								catch(NumberFormatException e) {
+									//System.out.println(e.getMessage());
+									e.printStackTrace();
+									System.out.println("Not a valid booking number...");
+
+								}
 								
 								
 							}
@@ -298,7 +329,7 @@ public class UserMenu {
 				
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 				s.nextLine();
 				System.out.println("Not a Valid Option...\n");
 				option = 1;

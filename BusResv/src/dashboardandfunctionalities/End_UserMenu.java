@@ -57,10 +57,17 @@ public class End_UserMenu {
 		return date;
 	}
 
+	
+	
+	
+	
+	
+	
 
 	String pattern = "^[A-Za-z\\s]*$"; // ^[a-zA-Z]*$";
 	
 	public String SearchBus(Scanner input,String from,String to,LocalDate date) {
+		
 		
 		
 		int option = 1;
@@ -81,6 +88,7 @@ public class End_UserMenu {
 					return "No bus available...";
 				}
 				System.out.println((i + 1) + ". " + str.get(i));
+				
 			}
 			
 			
@@ -108,7 +116,12 @@ public class End_UserMenu {
 				
 			
 			}
-
+			else
+			{
+				System.out.println("Invalid option...");
+				option=1;
+			
+			}
 		}
 
 	} catch (Exception e) {
@@ -249,9 +262,11 @@ public class End_UserMenu {
 			
 			if(checkSeat.equals("")) {
 			
-				i++;
+				
 				
 				seatnos.add(seatNo);
+				
+				i++;
 				
 				//return seatNo ;
 				

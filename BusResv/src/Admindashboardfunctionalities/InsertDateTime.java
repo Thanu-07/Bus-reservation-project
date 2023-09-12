@@ -50,7 +50,7 @@ public class InsertDateTime {
 
 			DayOfWeek dayofweek = currentDate.getDayOfWeek();
 
-			int id;
+			int id ;
 
 			switch (dayofweek) {
 
@@ -156,9 +156,9 @@ public class InsertDateTime {
 		
 		String query = "select id from Bus_Calender where Day_of_Month = ? and Months = ? and Years = ?";
 		
-		try {
+		try (
 			Connection con = DatabaseConnection.getDatabaseConnection();
-			PreparedStatement pst = con.prepareStatement(query);
+			PreparedStatement pst = con.prepareStatement(query);){
 			
 			pst.setInt(1, day);
 			pst.setInt(2, month);
@@ -175,7 +175,7 @@ public class InsertDateTime {
 			
 		} catch (SQLException e) {
 			
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		
 		
@@ -192,11 +192,11 @@ public class InsertDateTime {
 		
 		String query = "insert into Bus_Calender (Day_of_Week,Day_of_Month,Months,Years) values (?,?,?,?)";
 		
-		try {
+		try (
 		
 		Connection con = DatabaseConnection.getDatabaseConnection();
 		
-		PreparedStatement pst = con.prepareStatement(query);
+		PreparedStatement pst = con.prepareStatement(query);){
 		
 		pst.setString(1, dayname);
 		pst.setInt(2, day);
@@ -233,9 +233,9 @@ public class InsertDateTime {
 		
 		String query = "select id from bus_list";
 		
-		try {
+		try (
 			Connection con = DatabaseConnection.getDatabaseConnection();
-			Statement st = con.createStatement();
+			Statement st = con.createStatement();){
 			
 			ResultSet rs = st.executeQuery(query);
 			
