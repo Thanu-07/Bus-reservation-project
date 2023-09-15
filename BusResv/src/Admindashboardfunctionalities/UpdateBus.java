@@ -14,28 +14,28 @@ public class UpdateBus extends AdminFunction{
 	int busID;
 	
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
-		UpdateBus ub = new UpdateBus();
-		
-		Scanner s = new Scanner(System.in);
-		
-		ub.updateBusDetails(s);
-		
-		try {
-			
-			ub.updateBus(ub.GetBusID(s));
-			
-		} catch (SQLException e) {
-			
-			e.printStackTrace();
-		}
-		
-		
-		
-
-	}
+//	public static void main(String[] args) {
+//		// TODO Auto-generated method stub
+//		
+//		UpdateBus ub = new UpdateBus();
+//		
+//		Scanner s = new Scanner(System.in);
+//		
+//		ub.updateBusDetails(s);
+//		
+//		try {
+//			
+//			ub.updateBus(ub.GetBusID(s));
+//			
+//		} catch (SQLException e) {
+//			
+//			e.printStackTrace();
+//		}
+//		
+//		
+//		
+//
+//	}
 	
 	void updateBus(int id) throws SQLException{
 		
@@ -62,7 +62,17 @@ public class UpdateBus extends AdminFunction{
 			sb.append("To_Terminal = ?");
 		}
 		
+		int length = sb.length();
+		if (length > 0 && sb.charAt(length - 1) == ',') {
+		    sb.delete(length - 2, length); // Remove the trailing ", "
+		}
+		
 		sb.append("where id = ?;");
+		
+//		} else {
+//		   
+//		    sb.append("No valid parameters provided.");
+//		}
 		
 		Connection con = DatabaseConnection.getDatabaseConnection();
 		PreparedStatement pst = con.prepareStatement(sb.toString());
@@ -93,7 +103,7 @@ public class UpdateBus extends AdminFunction{
 	}
 
 	
-	void updateBusDetails(Scanner s){
+	void updateBusDetails(Scanner s) throws SQLException{
 		
 		
 	End_UserMenu eu = new End_UserMenu();
@@ -102,11 +112,31 @@ public class UpdateBus extends AdminFunction{
 		
 		int adminOpt;
 		
+//		System.out.println("Available Buses : ");
+//		ArrayList <Integer> ar = AdminFunction.displayBuses();
+//		for(Integer i :ar) {
+//			System.out.println(i);
+//		}
+//		
+//		
+//		System.out.println("Enter Bus No to be update : ");
+//		
+//		try {
+//		
+//			int busno = s.nextInt();
+//		
+//		if(ar.contains(busno)) {
+//			
+//			int id = AdminFunction.getBusID(busno);
+//		
+		
+		
+		
 		System.out.println(" Update Option : ");
 		
 		System.out.println("1) Update Bus Type \n 2) Update Bus Capacity \n 3) Update Bus Boarding Place \n 4) Update Droping Place \n 5) Exit Update Bus");
 		
-		System.out.println("Enter Update Option : ");
+		//System.out.println("Enter Update Option : ");
 		
 		
 		while(!found) {
@@ -120,6 +150,7 @@ public class UpdateBus extends AdminFunction{
 			try {
 			
 			 adminOpt = s.nextInt();
+			 s.nextLine();
 			 break;
 			
 			}
@@ -219,6 +250,18 @@ public class UpdateBus extends AdminFunction{
 			}
 			
 		}
+		
+//		}
+//		else
+//			System.out.println("Invalid bus Number...");
+//		
+//		}
+//		
+//		catch(Exception e) {
+//		System.out.println(e.getMessage());
+//		}
+		
+		
 
      }
 	

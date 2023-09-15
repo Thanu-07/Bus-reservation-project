@@ -14,7 +14,7 @@ public class GenerateEticket {
 	void generateTicket (String bookNo) throws SQLException{
 		
 		
-		String query = "select booking_no,passenger_name,age,gender,bus_No,bus_Type,seat_No,boarding_point,concat (date(travel_date_time),' | ',time(travel_date_time)),dropping_point,concat (date(arriving_date_time),' | ',time(arriving_date_time))  from booking_records where booking_no = " +bookNo+ "";
+		String query = "select booking_no,passenger_name,age,gender,bus_No,bus_Type,seat_No,boarding_point,travel_date,travel_time,dropping_point,arriving_date,arriving_time  from booking_records where booking_no = " +bookNo;
 		
 		Connection con = DatabaseConnection.getDatabaseConnection();
 		Statement st = con.createStatement();
@@ -25,8 +25,13 @@ public class GenerateEticket {
 		while(rs.next()) {
 			// System.out.println("Booking ID : " + rs.getString(1) + "                    Bus : " + rs.getInt(5) + "                    Bus Type : " + rs.getInt(6)+ "\n" + "Boarding Point : " + rs.getString(8) + "\nJourney Date and Time : " + rs.getString(9) + "                    Dropping Point : " + rs.getString(10) + "\nDropping Date and Time : " + rs.getString(11) + "\n Passenger Details : " + rs.getString(2) + " | Age : " + rs.getInt(3) + " | Gender : " + rs.getString(4) + "\n Seat No : " + rs.getInt(7));
 			
-			System.out.println("\n Booking ID : " + rs.getString(1) + "            Bus : " + rs.getInt(5) + "            Bus Type : " + rs.getString(6) + "\n\n-----------------------------------------------------------------------------------------------------\n\n Boarding Point : " + rs.getString(8) + "                         |     Dropping Point : " + rs.getString(10) + "\n\n Journey Date and Time : " + rs.getString(9)  + "    |     Dropping Date and Time : " + rs.getString(11) + "\n\n-----------------------------------------------------------------------------------------------------\n\n Passenger Details : " + rs.getString(2) + " | Age : " + rs.getInt(3) + " | Gender : " + rs.getString(4) + "\n Seat No           : " + rs.getInt(7));
+//			System.out.println("\n Booking ID : " + rs.getString(1) + "            Bus : " + rs.getInt(5) + "            Bus Type : " + rs.getString(6) + "\n\n-----------------------------------------------------------------------------------------------------\n\n Boarding Point : " + rs.getString(8) + "                         |     Dropping Point : " + rs.getString(10) + "\n\n Journey Date and Time : " + rs.getDate(9)  + "    |     Dropping Date and Time : " + rs.getString(11) + "\n\n-----------------------------------------------------------------------------------------------------\n\n Passenger Details : " + rs.getString(2) + " | Age : " + rs.getInt(3) + " | Gender : " + rs.getString(4) + "\n Seat No           : " + rs.getInt(7));
+//			System.out.println();
+			
+			System.out.println("\n Booking ID : " + rs.getString(1) + "    |      Bus : " + rs.getInt(5) + "    |    Bus Type : " + rs.getString(6) + "\n\n-----------------------------------------------------------------------------------------------------\n\n Boarding Point : " + rs.getString(8) + "         |        Dropping Point : " + rs.getString(11) + "\n\n Journey Date  : " + rs.getString(9)  + "         |        Dropping Date : " + rs.getString(12)  + "\n Journey Time  : " + rs.getString(10) + "          |        Dropping Time : " + rs.getString(13) + "\n\n-----------------------------------------------------------------------------------------------------\n\n Passenger Details : " + rs.getString(2) + " | Age : " + rs.getInt(3) + " | Gender : " + rs.getString(4) + "\n Seat No           : " + rs.getInt(7));
 			System.out.println();
+			
+			
 		}
 		
 	}

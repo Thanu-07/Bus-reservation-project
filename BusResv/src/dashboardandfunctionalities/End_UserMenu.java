@@ -28,8 +28,21 @@ public class End_UserMenu {
 	private String from; // boardingpoint
 	private String to; // dropping point
 	private LocalDate date;
-	private  int bus_id;
+	private static String arrivedate;
+	private  int bus_id; // bus number 51 etc
+	private int bus_no_id;
 	private int busSeat;
+	
+	
+	
+	public int getBus_no_id() {
+		return bus_no_id;
+	}
+
+	public void setBus_no_id(int bus_no) {
+		this.bus_no_id = bus_no;
+	}
+
 	
 	public int getBus_id() {
 		return bus_id;
@@ -59,6 +72,15 @@ public class End_UserMenu {
 
 	
 	
+	public String getArrivedate() {
+		return arrivedate;
+	}
+
+	public void setArrivedate(String arrivedate) {
+		this.arrivedate = arrivedate;
+	}
+	
+	
 	
 	
 	
@@ -79,7 +101,7 @@ public class End_UserMenu {
 		try {
 //			System.out.println(userMenuDAO.SearchBusDAO(from,to,date));
 			
-			System.out.println("\nBuses Available : \n");
+			System.out.println("\nBuses found : \n");
 			
 			ArrayList<String> str = new ArrayList<>();
 			str.add(userMenuDAO.SearchBusDAO(from,to,date));
@@ -112,6 +134,21 @@ public class End_UserMenu {
 				int pipelinecharindex = struserbus.indexOf("|");
 				struserbus = struserbus.substring(colonindex + 1, pipelinecharindex).trim();// trim() -> Returns a string whose value is this string, with all leadingand trailing space removed
 				// inclusive & exclusive  (colonIndex + 1) and includes characters up to, but not including, the pipe character (pipeIndex).
+				
+				
+				
+				// setting bus number :
+				
+				int busno = Integer.parseInt(struserbus);
+				bus_no_id = busno;
+				
+				
+				
+				arrivedate = (userMenuDAO.getArriveDate(struserbus,date));
+				//System.out.println("Arriving date : "+ arrivedate);
+				
+				
+				
 				option = 2;
 				
 			
@@ -290,61 +327,7 @@ public class End_UserMenu {
 		
 		return seatnos;
 	}	
-//		
-//		while(!found) {
-//		
-//			try {
-//				
-//				
-//				
-//				System.out.println("Select Seat:");
-//		
-//				for(int i=1;i<=totalSeat;i++) {
-//				
-//			     int seatNo = s.nextInt();
-//				
-//		if(availableSeats.contains(seatNo)) { // seatNo <= seatAvailable.size() && 
-//			
-//			// checking seat available for the bus from db
-//			
-//			if(userMenuDAO.isSeatsAvailableDAO(bus_id,seatNo,date)) { // true
-//				
-//				//if(userMenuDAO.isBookedSeats(bus_id,date).isEmpty())
-//				
-//				found = true;
-//				
-//				return seatNo;
-//	
-//				
-//				//userMenuDAO.availableSeats(bus_id,seatNo,date);
-//				
-//				
-//				//availableSeats(seatAvailable);
-//				
-//			}
-//			else
-//				System.out.println("Seat Already Booked...Select Another Seat");
-//				
-//				
-//		}
-//		else {
-//			System.out.println("Incorrect seat number provide a correct seat number...!");
-//			
-//		}
-//		
-//				}
-//		
-//		}
-//		catch(Exception e) {
-//			System.out.println(e);
-//			s.nextLine();
-//			System.out.println("Select Seat:");
-//		}
-//		
-//		}
-//
-//		return 0;
-//	}
+
 
 
 
@@ -384,24 +367,6 @@ private String selectSeat(int seatNo,ArrayList<Integer> availableSeats) throws S
 
 
 
-
-
-
-
-//	private static ArrayList<Integer> availableSeats(ArrayList<Integer> seatAvailable) {
-//		// TODO Auto-generated method stub
-//		
-//		ArrayList<Integer> seat = new ArrayList<>();
-//		
-//		System.out.println("Seats Available : ");
-//		
-//		for(int i=0;i<seatAvailable.size();i++) {
-//		
-//		//System.out.println(seatAvailable.get(i));
-//			seat.add(seatAvailable.get(i));
-//		}
-//		return seat;
-//	}
 
 
 
@@ -554,87 +519,7 @@ private String selectSeat(int seatNo,ArrayList<Integer> availableSeats) throws S
 		
 	}
 	
-	
-	
-//private  int getBus(int i) {
-//		
-//		
-//		int option = 1;
-//		int userbusno = 0;
-//		String struserbus = "";
-//		//ArrayList<String> str = new ArrayList<>();
-//		userMenuDAO usermenu = new userMenuDAO();
-//		
-//		try {
-////			System.out.println(userMenuDAO.SearchBusDAO(from,to,date));
-//			
-//			ArrayList<String> str = new ArrayList<>();
-//			str.add(userMenuDAO.SearchBusDAO(from,to,date));
-//			for(int i1 =0;i1<str.size();i1++) {
-//				if(str.get(i1).equals("No bus available...")) {
-//					break;
-//				}
-//				System.out.println((i1 + 1) + ". " + str.get(i1));
-//			}
-//			
-//			System.out.println("Enter the option : ");
-//			
-//			while(option==1) {
-//			
-//				try {
-//					option = input.nextInt();
-//				}
-//				catch(InputMismatchException e) {
-//					System.out.println("Invalid Option...");
-//					input.nextLine();
-//					option = 1;
-//				}
-//			
-//			if(option >= 1 && option <= str.size()) {
-//				 struserbus = str.get(option-1);
-//				
-//				int colonindex = struserbus.indexOf(":");
-//				int pipelinecharindex = struserbus.indexOf("|");
-//				String sub = struserbus.substring(colonindex + 1, pipelinecharindex).trim();// trim() -> Returns a string whose value is this string, with all leadingand trailing space removed
-//				// inclusive & exclusive  (colonIndex + 1) and includes characters up to, but not including, the pipe character (pipeIndex).
-//				
-//				try {
-//					
-//				 bus_id = Integer.parseInt(sub);
-//
-//				 System.out.println("Bus No : " + userbusno);
-//				 //End_UserMenu.ViewSeats(userbusno);
-//				 
-//				 option =2;
-//				 return bus_id;
-//				
-//				}
-//				catch(NumberFormatException nfe) {
-//					System.out.println(nfe.getMessage());
-//				}
-//				
-//				catch(Exception e) {
-//					System.out.println(e.getMessage());
-//				}
-//				
-//				//userMenuDAO.ViewSeatsDAO(userbusno);
-//				// End_UserMenu.displaySeatLayout();
-//			}
-//			else
-//				{System.out.println("Invalid Option...");
-//				System.out.println("Enter the option : ");
-//				option = 1;}
-//			}
-//			
-//			
-//			
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		return bus_id;
-//	}
+
 
 	
 
@@ -646,7 +531,13 @@ private String selectSeat(int seatNo,ArrayList<Integer> availableSeats) throws S
 		try {
 			
 			if(!temp.equals("No bus available...")) {
+				
+				
+				
 				bus_No = Integer.parseInt(temp);
+				
+				//bus_id = Integer.parseInt(temp);
+				
 				  bus_id = UserBooking.getBusNoDAO(bus_No);
 			} 
 			else
@@ -666,13 +557,15 @@ private String selectSeat(int seatNo,ArrayList<Integer> availableSeats) throws S
 		
 		userMenuDAO umd = new userMenuDAO();
 		
-		int capacity = umd.getCapacity(this.bus_id);
+		int capacity = umd.getCapacity(this.bus_id); // bus no
 		
 		int bookedCount = umd.getBookedCount(this.bus_id, this.date);
 		
 		return  bookedCount < capacity  ? true:false;
 		
 	}
+
+
 	
 	
 

@@ -319,7 +319,7 @@ public static ArrayList <String> BookingHistory(String user) {
 			int i = 1;
 			while(rs.next()) {
 			 
-				bookhis.add(i++ +") " + "Booking Number : " + rs.getString(2) + " | " + "Passenger Name : " + rs.getString(4) + " | " + "Age : " + rs.getInt(5) + " | " + "Gender : " + rs.getString(6) + " | " + "Bus Number : " + rs.getInt(7) + " | " + "Bus Type : " + rs.getString(8) + " | " + "Seat Number : " + rs.getInt(9) + " | " + "Boarding Point : " + rs.getString(10) + " | " + "Travel Date & Time : " + rs.getString(11) + " | " + "Dropping Point : " + rs.getString(12) + " | " +"Arriving Date & Time : " + rs.getString(13));
+				bookhis.add(i++ +") " + "Booking Number : " + rs.getString(2) + " | " + "Passenger Name : " + rs.getString(4) + " | " + "Age : " + rs.getInt(5) + " | " + "Gender : " + rs.getString(6) + " | " + "Bus Number : " + rs.getInt(7) + " | " + "Bus Type : " + rs.getString(8) + " | " + "Seat Number : " + rs.getInt(9) + " | " + "Boarding Point : " + rs.getString(10) + " | " + "Travel Date : " + rs.getString(11) + " | " + "Travel Time : " + rs.getString(12) + " | " + "Dropping Point : " + rs.getString(13) + " | " + "Arriving Date : " + rs.getString(14) + " | " + "Arriving Time : " + rs.getString(15));
 			
 		}
 			

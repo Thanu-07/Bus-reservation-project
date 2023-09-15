@@ -3,6 +3,7 @@ package dashboardandfunctionalities;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.mysql.cj.protocol.x.SyncFlushDeflaterOutputStream;
@@ -89,6 +90,7 @@ public class UserMenu {
 								String busid = eum.SearchBus(s, eum.CheckValidBoardPoint(s), eum.CheckValidDropPoint(s),
 										eum.CheckValidTravelDate(s));
 
+								//System.out.println("Bus id : " + busid);
 								
 								eum.getBusId(busid);
 								
@@ -138,6 +140,9 @@ public class UserMenu {
 									while(true) {
 									System.out.println("Select 1 to proceed Payment, Select 2 to exit :\n");
 									System.out.println("Select Option : ");
+									
+									try {
+									
 									int payment = s.nextInt();
 									
 									
@@ -216,9 +221,16 @@ public class UserMenu {
 									
 									}
 									
-									
+									catch(InputMismatchException i) {
+										System.out.println("Not a valid Payment Option...");
+										s.nextLine();
+										
+									}
 									
 									}
+									
+								
+								}
 								
 								//break; -- commenting this helps to repeating menu
 
@@ -259,7 +271,7 @@ public class UserMenu {
 								
 								try {
 									
-								int num =(Integer.parseInt(bookno));
+								int num =Integer.parseInt(bookno);
 								
 								num = AdminFunction.BookingCancellation(bookno);
 								
@@ -319,7 +331,7 @@ public class UserMenu {
 				} 
 				
 				else if (option < 1 || option > 3) {
-					System.out.println("Incorrect Option..");
+					System.out.println("Incorrect Option..\n");
 					option = 1;
 				} 
 				
@@ -328,11 +340,19 @@ public class UserMenu {
 					
 				
 
-			} catch (Exception e) {
-				//e.printStackTrace();
-				s.nextLine();
+			} 
+			
+			catch(InputMismatchException i) {
 				System.out.println("Not a Valid Option...\n");
-				option = 1;
+				s.nextLine();
+			}
+			
+			
+			catch (Exception e) {
+				e.printStackTrace();
+				s.nextLine();
+				//System.out.println("Not a Valid Option...\n");
+				//option = 1;
 			}
 
 		}

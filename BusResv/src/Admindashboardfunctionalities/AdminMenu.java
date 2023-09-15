@@ -130,6 +130,7 @@ public class AdminMenu {
 					ub.updateBus(ub.GetBusID(s));
 					
 					
+					
 					break;
 					
 					
@@ -233,7 +234,7 @@ public class AdminMenu {
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			e.printStackTrace();
 			s.nextLine();
 			option = 1;
 		}

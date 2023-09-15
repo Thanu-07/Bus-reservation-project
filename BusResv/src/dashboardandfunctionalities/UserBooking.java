@@ -6,7 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import busResv.DatabaseConnection;
@@ -261,20 +264,102 @@ public String CheckValidEmail(Scanner s) {
 	}
 
 
-
-	 void addBooking(UserBooking ub, End_UserMenu eum, String bookNo, String user ) throws SQLException {
+// orginal :
+//	 void addBooking(UserBooking ub, End_UserMenu eum, String bookNo, String user ) throws SQLException {
+//		// TODO Auto-generated method stub
+//		
+//		String passengerName = ub.passenger_name;
+//		int age = ub.age;
+//		String gender	= ub.gender;
+//		int busID = eum.getBus_id();
+//		int seatNo = ub.getPassSeatNo();
+//		LocalDate date = eum.getDate();
+//		
+//		java.sql.Date sqldate = Date.valueOf(date);
+//		
+//		
+//		
+//		
+//		
+//		int bus_No =0;
+//		String bus_Type="";
+//		String boarding_point ="";
+//		String dropping_point="";
+//		String travel_date_time ="";
+//		String arriving_date_time="";
+//		
+//		
+//		String getbus = "select buslist.bus_No, buslist.Type, buslist.From_terminal, buslist.To_Terminal, concat(date(sop.schedule_operating_date_time),' | ',time(sop.schedule_operating_date_time)) as from_date_time, " +
+//				" concat(date(sop.schedule_reaching_date_time),' | ',time(sop.schedule_reaching_date_time)) as to_date_time from bus_list as buslist join schedule_of_bus as sop on buslist.id = sop.bus_No "
+//				+ "where buslist.bus_No = '" + busID + "' and date(sop.schedule_operating_date_time) = '" + sqldate +"'";
+//		
+//		Connection con = DatabaseConnection.getDatabaseConnection();
+//		Statement st = con.createStatement();
+//		ResultSet rs = st.executeQuery(getbus);
+//		
+//		while(rs.next()) {
+//			bus_No = rs.getInt(1);
+//			bus_Type = rs.getString(2);
+//			boarding_point = rs.getString(3);
+//			travel_date_time = rs.getString(5);
+//			dropping_point =  rs.getString(4);
+//			arriving_date_time = rs.getString(6);
+//		}
+//		
+//		
+//		
+//		
+//		
+//		String addbooking = "insert into Booking_records (booking_no,User_name,passenger_name,age,gender,bus_No,bus_Type,seat_No,boarding_point,travel_date_time,dropping_point,arriving_date_time) values (?,?,?,?,?,?,?,?,?,?,?,?)";
+//		
+//		PreparedStatement pst = con.prepareStatement(addbooking);
+//		
+//		
+////		java.sql.Date sqldate = Date.valueOf(travelDate);
+////		pst.setDate(5, sqldate);
+//		
+//		pst.setString(1, bookNo);
+//		pst.setString(2, user);
+//		pst.setString(3,passengerName);
+//		pst.setInt(4, age);
+//		pst.setString(5, gender);
+//		pst.setInt(6, bus_No);
+//		
+//		pst.setString(7, bus_Type);
+//		pst.setInt(8, seatNo);
+//		pst.setString(9,boarding_point);
+//		pst.setString(10, travel_date_time);
+//		pst.setString(11, dropping_point);
+//		pst.setString(12, arriving_date_time);
+//		
+//		pst.executeUpdate();
+//		
+//	}
+	
+	
+	void addBooking(UserBooking ub, End_UserMenu eum, String bookNo, String user ) throws SQLException {
 		// TODO Auto-generated method stub
 		
 		String passengerName = ub.passenger_name;
 		int age = ub.age;
 		String gender	= ub.gender;
-		int busID = eum.getBus_id();
+		int busID = eum.getBus_no_id();
 		int seatNo = ub.getPassSeatNo();
 		LocalDate date = eum.getDate();
+// 		java.sql.Date sqloperdate = Date.valueOf(date);
 		
-		java.sql.Date sqldate = Date.valueOf(date);
+		
+		String arrdate = eum.getArrivedate();
+		
+//		System.out.println("static accessed using object " + arrdate);
+//		SimpleDateFormat sdt = new SimpleDateFormat("dd-MM-yyyy");
+//		java.sql.Date sqlarrdate = (Date) sdt.parse(arrdate);
 		
 		
+		
+		int dayofmonth = date.getDayOfMonth();
+		int month = date.getMonthValue();
+		int year = date.getYear();
 		
 		
 		
@@ -282,34 +367,49 @@ public String CheckValidEmail(Scanner s) {
 		String bus_Type="";
 		String boarding_point ="";
 		String dropping_point="";
-		String travel_date_time ="";
-		String arriving_date_time="";
+		String travel_date = "";
+		String travel_time ="" ;
+		String arriving_date ="";
+		String arriving_time = "" ;
 		
 		
-		String getbus = "select buslist.bus_No, buslist.Type, buslist.From_terminal, buslist.To_Terminal, concat(date(sop.schedule_operating_date_time),' | ',time(sop.schedule_operating_date_time)) as from_date_time, " +
-				" concat(date(sop.schedule_reaching_date_time),' | ',time(sop.schedule_reaching_date_time)) as to_date_time from bus_list as buslist join schedule_of_bus as sop on buslist.id = sop.bus_No "
-				+ "where buslist.bus_No = '" + busID + "' and date(sop.schedule_operating_date_time) = '" + sqldate +"'";
 		
-		Connection con = DatabaseConnection.getDatabaseConnection();
-		Statement st = con.createStatement();
-		ResultSet rs = st.executeQuery(getbus);
+		String query =" select bus_list.bus_no , bus_list.Type,  bus_list.From_terminal, bus_list.To_Terminal, concat(bus_calender.day_of_month ,'-',bus_calender.months,'-',bus_calender.years)  as date_of_operate, bus_timing_table.depart_time  , bus_timing_table.arrive_time"
+		+ " from bus_timing_table join bus_list on bus_list.id = bus_timing_table.bus_no join bus_calender on bus_calender.id = bus_timing_table.operate_date_id"
+		+ " where bus_list.id = ? and bus_calender.day_of_month = ? and bus_calender.months = ? and bus_Calender.years = ?";
+		
+		String addbooking = "insert into Booking_records (booking_no,User_name,passenger_name,age,gender,bus_No,bus_Type,Seat_No,boarding_point,travel_date,travel_time,dropping_point,arriving_date,arriving_time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		
+		
+		
+		
+		try (Connection con = DatabaseConnection.getDatabaseConnection();
+				PreparedStatement st = con.prepareStatement(query);
+				PreparedStatement pst = con.prepareStatement(addbooking);){
+			
+			st.setInt(1, busID);
+			st.setInt(2,dayofmonth);
+			st.setInt(3,month);
+			st.setInt(4,year);
+			
+			
+		ResultSet rs = st.executeQuery();
 		
 		while(rs.next()) {
 			bus_No = rs.getInt(1);
 			bus_Type = rs.getString(2);
 			boarding_point = rs.getString(3);
-			travel_date_time = rs.getString(5);
+			travel_date = rs.getString(5);
+			 travel_time = rs.getString(6);
 			dropping_point =  rs.getString(4);
-			arriving_date_time = rs.getString(6);
+			arriving_date = arrdate;
+			 arriving_time = rs.getString(7);
 		}
 		
 		
 		
 		
 		
-		String addbooking = "insert into Booking_records (booking_no,User_name,passenger_name,age,gender,bus_No,bus_Type,seat_No,boarding_point,travel_date_time,dropping_point,arriving_date_time) values (?,?,?,?,?,?,?,?,?,?,?,?)";
-		
-		PreparedStatement pst = con.prepareStatement(addbooking);
 		
 		
 //		java.sql.Date sqldate = Date.valueOf(travelDate);
@@ -325,18 +425,30 @@ public String CheckValidEmail(Scanner s) {
 		pst.setString(7, bus_Type);
 		pst.setInt(8, seatNo);
 		pst.setString(9,boarding_point);
-		pst.setString(10, travel_date_time);
-		pst.setString(11, dropping_point);
-		pst.setString(12, arriving_date_time);
+		pst.setString(10, travel_date);
+		pst.setString(11, travel_time);
+		pst.setString(12, dropping_point);
+		pst.setString(13, arriving_date);
+		pst.setString(14, arriving_time);
+		
 		
 		pst.executeUpdate();
 		
 	}
+
+
+
+
+ }
+	
+	
+	
+	
 	
 	
 	public static int getBusNoDAO(int busid) throws SQLException {
 		
-		String getBus = "select bus_No from bus_list where id = " + busid +"";
+		String getBus = "select bus_No from bus_list where id = " + busid;
 		Connection con = DatabaseConnection.getDatabaseConnection();
 		Statement st = con.createStatement();
 		ResultSet rs = st.executeQuery(getBus);
@@ -411,6 +523,7 @@ public String CheckValidEmail(Scanner s) {
 				try {
 
 					while (option == 1) {
+						
 
 						option = s.nextInt();
 
@@ -432,8 +545,8 @@ public String CheckValidEmail(Scanner s) {
 							present = true;
 						}
 					}
-				} catch (Exception e) {
-					System.out.println(e);
+				} catch (InputMismatchException e) {
+					System.out.println("Not a valid upi payment option...");
 					s.nextLine();
 
 				}
